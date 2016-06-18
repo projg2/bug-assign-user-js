@@ -26,11 +26,36 @@
     function createBox()
     {
         var top = document.querySelector('#bz_show_bug_column_2 tbody');
-        var tr = document.createElement('tr');
-        tr.innerHTML += ('<th class="field_label">Maintainers:</th><td>' +
-                          '<form action="#"><table id="bug-assign-table">' +
-                          '</table></form></td>');
-        top.appendChild(tr);
+        if (top !== null)
+        {
+            // bug edit form
+            var tr = document.createElement('tr');
+            tr.innerHTML += ('<th class="field_label">Maintainers:</th><td>' +
+                             '<form action="#"><table id="bug-assign-table">' +
+                             '</table></form></td>');
+            top.appendChild(tr);
+        }
+        else
+        {
+            // bug file form
+            var over = document.querySelector('#field_container_bug_status + td + td');
+            var newRowSpan = over.rowSpan - 1;
+            over.rowSpan = 1;
+
+            var left = document.querySelector('#field_label_assigned_to + td');
+            left.colSpan = 1;
+
+            var th = document.createElement('th');
+            th.class = 'field_label';
+            th.textContent = 'Maintainers:';
+            left.parentNode.appendChild(th);
+
+            var td = document.createElement('td');
+            td.rowSpan = newRowSpan;
+            td.innerHTML = ('<form action="#"><table id="bug-assign-table">' +
+                            '</table></form>');
+            left.parentNode.appendChild(td);
+        }
     }
 
     // add triggers for auto-updates where appropriate
@@ -64,10 +89,13 @@
 
         // assignee reset
         var assignReset = document.getElementById('set_default_assignee');
-        assignReset.addEventListener('change', syncMaintainerStatesToBug);
+        if (assignReset !== null)
+            assignReset.addEventListener('change', syncMaintainerStatesToBug);
 
         // 'add cc' edits
         var newCCInput = document.getElementById('newcc');
+        if (newCCInput === null)
+            newCCInput = document.getElementById('cc');
         newCCInput.addEventListener('keyup', function(ev) {
             if ('bugARefreshTimeout' in ev.target)
                 window.clearTimeout(ev.target.bugARefreshTimeout);
@@ -309,6 +337,8 @@
         }
 
         var newCCInput = document.getElementById('newcc');
+        if (newCCInput === null)
+            newCCInput = document.getElementById('cc');
         var newCC = newCCInput.value.split(',');
         // first, clean up the list from any occurences of email
         newCC = newCC.filter(function (val) { return val != email; });
@@ -324,8 +354,12 @@
         var assignInput = document.getElementById('assigned_to');
         assignInput.value = value;
         // expand the edit
-        document.getElementById('bz_assignee_edit_action').click();
-        document.getElementById('set_default_assignee').checked = false;
+        var editButton = document.getElementById('bz_assignee_edit_action');
+        if (editButton !== null)
+            editButton.click();
+        var resetAssign = document.getElementById('set_default_assignee');
+        if (resetAssign !== null)
+            resetAssign.checked = false;
     }
 
     // Handle an explicit change of 'a' input
@@ -445,11 +479,13 @@
         var assignReset = document.getElementById('set_default_assignee');
         var assignInput = document.getElementById('assigned_to');
         var assignee;
-        if (!assignReset.checked)
+        if (assignReset === null || !assignReset.checked)
             assignee = assignInput.value.trim();
 
         // get all CC-es into completeCCList
         var newCCInput = document.getElementById('newcc');
+        if (newCCInput === null)
+            newCCInput = document.getElementById('cc');
         var completeCCList = newCCInput.value.split(',');
         var unCCBox = document.getElementById('removecc');
         if (unCCBox !== null)
