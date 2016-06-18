@@ -207,6 +207,16 @@
                 'cc': groupCC
             };
 
+            // check for maintainer-needed packages
+            if (maintainers[pkg].length === 0)
+            {
+                maintainers[pkg] = [
+                    {
+                        'email': 'maintainer-needed@gentoo.org'
+                    }
+                ];
+            }
+
             for (var m in maintainers[pkg])
             {
                 var mdata = maintainers[pkg][m];
