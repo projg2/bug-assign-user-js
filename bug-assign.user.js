@@ -345,7 +345,10 @@
         // then, add just one if requested and not in CC already
         if (state && !foundInCC)
             newCC.push(email);
-        newCCInput.value = newCC.join(', ').trim();
+        // trim extra whitespace
+        for (var i = 0; i < newCC.length; ++i)
+            newCC[i] = newCC[i].trim();
+        newCCInput.value = newCC.join(', ');
     }
 
     // Set new assignee for the bug
