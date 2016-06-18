@@ -538,9 +538,7 @@
                     // TODO: error handling
                 }
                 if (--reqInProgress === 0)
-                {
                     updateMaintainerTable();
-                }
             }
         };
         ++reqInProgress;
@@ -565,9 +563,7 @@
         maintainers = {};
 
         for (var i in packageList)
-        {
             fetchMaintainersForPackage(packageList[i]);
-        }
     }
 
     createBox();
