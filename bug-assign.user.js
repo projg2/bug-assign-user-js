@@ -117,11 +117,42 @@
         }
     }
 
+    // perform brace expansion
+    function performBraceExpansion(s)
+    {
+        var words = s.split(/[\s]/);
+        var braceExpansion = true;
+
+        while (braceExpansion)
+        {
+            var expanded = [];
+            braceExpansion = false;
+
+            for (var i = 0; i < words.length; ++i)
+            {
+                var m = words[i].match(/^(.*){([^}]*,[^}]*)}(.*)$/);
+                if (m)
+                {
+                    var spl = m[2].split(',');
+                    for (var j = 0; j < spl.length; ++j)
+                        expanded.push(m[1] + spl[j] + m[3]);
+                    braceExpansion = true;
+                }
+                else
+                    expanded.push(words[i]);
+            }
+
+            words = expanded;
+        }
+
+        return words.join(' ');
+    }
+
     // find package names in summary and return them as array
     // TODO: support brace expansion
     function getPackageNames()
     {
-        var summ = document.getElementById('short_desc').value;
+        var summ = performBraceExpansion(document.getElementById('short_desc').value);
         var words = summ.split(/[\s,;]/);
         var pnames = [];
         for (var i = 0; i < words.length; ++i)
