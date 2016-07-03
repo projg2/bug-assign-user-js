@@ -382,7 +382,7 @@
             newCCInput = document.getElementById('cc');
         var newCC = newCCInput.value.split(',');
         // first, clean up the list from any occurences of email
-        newCC = newCC.filter(function (val) { return val != email; });
+        newCC = newCC.filter(function (val) { return val.trim() != email; });
         // then, add just one if requested and not in CC already
         if (state && !foundInCC)
             newCC.push(email);
