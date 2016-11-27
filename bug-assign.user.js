@@ -304,7 +304,7 @@
                     tr = document.createElement('tr');
                     topbox.appendChild(tr);
                     td = document.createElement('td');
-                    td.style = 'font-size: 40%;';
+                    td.style = 'font-size: 80%;';
                     td.textContent = mdata.description;
                     tr.appendChild(td);
                 }
