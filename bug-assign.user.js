@@ -193,9 +193,11 @@
         tr.appendChild(td);
         td = document.createElement('th');
         td.textContent = 'A';
+        td.style.textAlign = 'center';
         tr.appendChild(td);
         td = document.createElement('th');
         td.textContent = 'CC';
+        td.style.textAlign = 'center';
         tr.appendChild(td);
 
         // reset
@@ -213,18 +215,22 @@
 
             td = document.createElement('th');
             td.textContent = pkg;
+            td.style.textAlign = 'left';
             tr.appendChild(td);
 
             td = document.createElement('td');
+            td.style.textAlign = 'center';
             var groupA = document.createElement('input');
             groupA.type = 'checkbox';
             groupA.maintainers = [];
             groupA.pkg = pkg;
             groupA.addEventListener('change', groupAssignExplicitChange);
+            td.style.textAlign = 'center';
             td.appendChild(groupA);
             tr.appendChild(td);
 
             td = document.createElement('td');
+            td.style.textAlign = 'center';
             var groupCC = document.createElement('input');
             groupCC.type = 'checkbox';
             groupCC.maintainers = [];
@@ -275,6 +281,7 @@
                 tr.appendChild(td);
 
                 td = document.createElement('td');
+                td.style.textAlign = 'center';
                 input = document.createElement('input');
                 input.type = 'checkbox';
                 input.email = mdata.email;
@@ -286,6 +293,7 @@
                 tr.appendChild(td);
 
                 td = document.createElement('td');
+                td.style.textAlign = 'center';
                 input = document.createElement('input');
                 input.type = 'checkbox';
                 input.email = mdata.email;
