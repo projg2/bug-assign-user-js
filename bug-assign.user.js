@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Gentoo Bugzilla bug assignment helper
-// @namespace    http://dev.gentoo.org/~mgorny/bug-assign
+// @namespace    https://github.com/mgorny/bug-assign-user-js
 // @version      0
 // @description  Helper to suggest proper assignees for a bug
 // @author       Michał Górny
