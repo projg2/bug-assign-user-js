@@ -153,7 +153,7 @@
     function getPackageNames()
     {
         var summ = performBraceExpansion(document.getElementById('short_desc').value);
-        var words = summ.split(/[\s,;]/);
+        var words = summ.split(/[\s,;\[\]:]/);
         var pnames = [];
         for (var i = 0; i < words.length; ++i)
         {
