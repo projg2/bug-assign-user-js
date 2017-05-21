@@ -215,22 +215,22 @@
 
             td = document.createElement('th');
             td.textContent = pkg;
-            td.style = 'text-align: left';
+            td.style = 'text-align: left; border-top: 1px dashed black';
             tr.appendChild(td);
 
             td = document.createElement('td');
-            td.style = 'text-align: center';
+            td.style = 'text-align: center; border-top: 1px dashed black';
             var groupA = document.createElement('input');
             groupA.type = 'checkbox';
             groupA.maintainers = [];
             groupA.pkg = pkg;
             groupA.addEventListener('change', groupAssignExplicitChange);
-            td.style = 'text-align: center';
+            td.style = 'text-align: center; border-top: 1px dashed black';
             td.appendChild(groupA);
             tr.appendChild(td);
 
             td = document.createElement('td');
-            td.style = 'text-align: center';
+            td.style = 'text-align: center; border-top: 1px dashed black';
             var groupCC = document.createElement('input');
             groupCC.type = 'checkbox';
             groupCC.maintainers = [];
