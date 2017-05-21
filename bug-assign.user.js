@@ -193,9 +193,11 @@
         tr.appendChild(td);
         td = document.createElement('th');
         td.textContent = 'A';
+        td.style = 'text-align: center';
         tr.appendChild(td);
         td = document.createElement('th');
         td.textContent = 'CC';
+        td.style = 'text-align: center';
         tr.appendChild(td);
 
         // reset
@@ -213,18 +215,22 @@
 
             td = document.createElement('th');
             td.textContent = pkg;
+            td.style = 'text-align: left';
             tr.appendChild(td);
 
             td = document.createElement('td');
+            td.style = 'text-align: center';
             var groupA = document.createElement('input');
             groupA.type = 'checkbox';
             groupA.maintainers = [];
             groupA.pkg = pkg;
             groupA.addEventListener('change', groupAssignExplicitChange);
+            td.style = 'text-align: center';
             td.appendChild(groupA);
             tr.appendChild(td);
 
             td = document.createElement('td');
+            td.style = 'text-align: center';
             var groupCC = document.createElement('input');
             groupCC.type = 'checkbox';
             groupCC.maintainers = [];
@@ -269,12 +275,14 @@
 
                 td = document.createElement('td');
                 var maintText = document.createElement('span');
+                maintText.style = 'padding-left: 1em;';
                 maintText.textContent = mdata.email;
                 maintText.title = full_name;
                 td.appendChild(maintText);
                 tr.appendChild(td);
 
                 td = document.createElement('td');
+                td.style = 'text-align: center';
                 input = document.createElement('input');
                 input.type = 'checkbox';
                 input.email = mdata.email;
@@ -286,6 +294,7 @@
                 tr.appendChild(td);
 
                 td = document.createElement('td');
+                td.style = 'text-align: center';
                 input = document.createElement('input');
                 input.type = 'checkbox';
                 input.email = mdata.email;
@@ -304,7 +313,7 @@
                     tr = document.createElement('tr');
                     topbox.appendChild(tr);
                     td = document.createElement('td');
-                    td.style = 'font-size: 40%;';
+                    td.style = 'padding-left: 10px; padding-bottom: 5px; font-size: 60%;';
                     td.textContent = mdata.description;
                     tr.appendChild(td);
                 }
