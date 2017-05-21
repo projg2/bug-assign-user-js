@@ -225,7 +225,6 @@
             groupA.maintainers = [];
             groupA.pkg = pkg;
             groupA.addEventListener('change', groupAssignExplicitChange);
-            td.style = 'text-align: center; border-top: 1px dashed black';
             td.appendChild(groupA);
             tr.appendChild(td);
 
