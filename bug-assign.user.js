@@ -600,12 +600,6 @@
         var topbox = document.getElementById('bug-assign-table');
         packageList = getPackageNames();
 
-        if (packageList.length === 0)
-        {
-            topbox.innerHTML = 'No packages found in summary';
-            return;
-        }
-
         // mark as being refreshed
         topbox.innerHTML = '<div>Update in progress...</div>' + topbox.innerHTML;
         maintainers = {};
@@ -614,6 +608,10 @@
             fetchMaintainersForPackage(packageList[i]);
         // add the entry for special addresses
         addSpecialAddresses();
+
+        // _special makes it 1
+        if (packageList.length <= 1)
+            updateMaintainerTable();
     }
 
     // add special addresses that are displayed for all bugs
