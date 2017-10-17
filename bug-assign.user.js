@@ -277,6 +277,13 @@
                 maintText.textContent = mdata.email;
                 maintText.title = full_name;
                 td.appendChild(maintText);
+                var small = document.createElement('small');
+                small.style = 'padding-left: .5em';
+                var a = document.createElement('a');
+                a.href = 'https://bugs.gentoo.org/custom_userhistory.cgi?matchstr=' + mdata.email;
+                a.textContent = '[h]';
+                small.appendChild(a);
+                td.appendChild(small);
                 tr.appendChild(td);
 
                 td = document.createElement('td');
