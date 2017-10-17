@@ -178,12 +178,6 @@
         var topbox = document.getElementById('bug-assign-table');
         topbox.innerHTML = '';
 
-        if (Object.keys(maintainers).length === 0)
-        {
-            topbox.innerHTML = 'No valid packages found';
-            return;
-        }
-
         var tr, td, input;
 
         // header row
@@ -214,7 +208,8 @@
             topbox.appendChild(tr);
 
             td = document.createElement('th');
-            td.textContent = pkg;
+            if (pkg != '_special')
+                td.textContent = pkg;
             td.style = 'text-align: left; border-top: 1px dashed black';
             tr.appendChild(td);
 
@@ -222,6 +217,8 @@
             td.style = 'text-align: center; border-top: 1px dashed black';
             var groupA = document.createElement('input');
             groupA.type = 'checkbox';
+            if (pkg == '_special')
+                groupA.style = 'display: none';
             groupA.maintainers = [];
             groupA.pkg = pkg;
             groupA.addEventListener('change', groupAssignExplicitChange);
@@ -231,6 +228,8 @@
             td = document.createElement('td');
             td.style = 'text-align: center; border-top: 1px dashed black';
             var groupCC = document.createElement('input');
+            if (pkg == '_special')
+                groupCC.style = 'display: none';
             groupCC.type = 'checkbox';
             groupCC.maintainers = [];
             groupCC.pkg = pkg;
@@ -613,6 +612,28 @@
 
         for (var i in packageList)
             fetchMaintainersForPackage(packageList[i]);
+        // add the entry for special addresses
+        addSpecialAddresses();
+    }
+
+    // add special addresses that are displayed for all bugs
+    function addSpecialAddresses()
+    {
+        packageList.push('_special');
+        maintainers['_special'] = [
+            {
+                'email': 'licenses@gentoo.org',
+            },
+            {
+                'email': 'maintainer-wanted@gentoo.org',
+            },
+            {
+                'email': 'qa@gentoo.org',
+            },
+            {
+                'email': 'security@gentoo.org',
+            },
+        ];
     }
 
     createBox();
