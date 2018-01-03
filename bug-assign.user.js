@@ -582,8 +582,21 @@
             {
                 if (xmlhttp.status == 200)
                 {
-                    var json = JSON.parse(xmlhttp.responseText);
-                    maintainers[json.atom] = json.maintainers;
+                    var pkgmetadata = xmlhttp.responseXML.firstElementChild;
+                    if (pkgmetadata.tagName == 'pkgmetadata') {
+                        var results = [];
+                        for (var i = 0; i < pkgmetadata.children.length; ++i) {
+                            if (pkgmetadata.children[i].tagName != 'maintainer')
+                                continue;
+
+                            var maintainer = {};
+                            for (var j = 0; j < pkgmetadata.children[i].children.length; ++j) {
+                                maintainer[pkgmetadata.children[i].children[j].tagName] = pkgmetadata.children[i].children[j].innerHTML;
+                            }
+                            results.push(maintainer);
+                        }
+                        maintainers[pkg] = results;
+                    }
                 }
                 else if (xmlhttp.status == 404)
                 {
@@ -597,7 +610,10 @@
             }
         };
         ++reqInProgress;
-        xmlhttp.open('GET', 'https://packages.gentoo.org/packages/' + pkg + '.json', true);
+        xmlhttp.overrideMimeType("application/xml");
+        // TODO: Gentoo gitweb is hitting CORS restrictions
+        //xmlhttp.open('GET', 'https://gitweb.gentoo.org/repo/gentoo.git/plain/' + pkg + '/metadata.xml', true);
+        xmlhttp.open('GET', 'https://raw.githubusercontent.com/gentoo/gentoo/master/' + pkg + '/metadata.xml', true);
         xmlhttp.send();
     }
 
