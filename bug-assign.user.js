@@ -660,6 +660,9 @@
             {
                 'email': 'security@gentoo.org',
             },
+            {
+                'email': 'treecleaner@gentoo.org',
+            },
         ];
     }
 
