@@ -3,7 +3,7 @@
 // @namespace    https://github.com/mgorny/bug-assign-user-js
 // @version      1
 // @description  Helper to suggest proper assignees for a bug
-// @author       Michał Górny
+// @author       Michał Górny, Mart Raudsepp
 // @match        https://bugs.gentoo.org/*
 // ==/UserScript==
 
