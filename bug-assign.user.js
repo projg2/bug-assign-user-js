@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Gentoo Bugzilla bug assignment helper
 // @namespace    https://github.com/mgorny/bug-assign-user-js
-// @version      1
+// @version      2
 // @description  Helper to suggest proper assignees for a bug
 // @author       Michał Górny, Mart Raudsepp
 // @match        https://bugs.gentoo.org/*
@@ -282,6 +282,14 @@
                 var a = document.createElement('a');
                 a.href = 'https://bugs.gentoo.org/custom_userhistory.cgi?matchstr=' + mdata.email;
                 a.textContent = '[h]';
+                small.appendChild(a);
+                a = document.createElement('a');
+                a.href = 'https://bugs.gentoo.org/buglist.cgi?quicksearch=ALL%20assignee%3A' + mdata.email;
+                a.textContent = '[a]';
+                small.appendChild(a);
+                a = document.createElement('a');
+                a.href = 'https://bugs.gentoo.org/buglist.cgi?quicksearch=ALL%20cc%3A' + mdata.email;
+                a.textContent = '[cc]';
                 small.appendChild(a);
                 td.appendChild(small);
                 tr.appendChild(td);
