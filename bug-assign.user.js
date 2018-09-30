@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Gentoo Bugzilla bug assignment helper
 // @namespace    https://github.com/mgorny/bug-assign-user-js
-// @version      2
+// @version      3
 // @description  Helper to suggest proper assignees for a bug
 // @author       Michał Górny, Mart Raudsepp
 // @match        https://bugs.gentoo.org/*
@@ -651,6 +651,9 @@
         packageList.push('_special');
         maintainers['_special'] = [
             {
+                'email': 'cross@gentoo.org',
+            },
+            {
                 'email': 'licenses@gentoo.org',
             },
             {
@@ -658,6 +661,9 @@
             },
             {
                 'email': 'maintainer-wanted@gentoo.org',
+            },
+            {
+                'email': 'prefix@gentoo.org',
             },
             {
                 'email': 'proxy-maint@gentoo.org',
