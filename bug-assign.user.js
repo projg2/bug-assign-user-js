@@ -165,7 +165,10 @@
             {
                 // strip the version if any
                 var cp = cpv.replace(/-\d+(\.\d+)*[a-z]?((_alpha|_beta|_pre|_rc|_p)\d*)?(-r\d+)?$/, '');
-                pnames.push(cp);
+                if (!pnames.includes(cp))
+                {
+                    pnames.push(cp);
+                }
             }
         }
 
