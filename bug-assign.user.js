@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Gentoo Bugzilla bug assignment helper
 // @namespace    https://github.com/mgorny/bug-assign-user-js
-// @version      3
+// @version      4
 // @description  Helper to suggest proper assignees for a bug
 // @author       Michał Górny, Mart Raudsepp
 // @match        https://bugs.gentoo.org/*
@@ -158,7 +158,7 @@
         for (var i = 0; i < words.length; ++i)
         {
             // strip leading and trailing symbols
-            var cpv = words[i].replace(/^\W*/, '').replace(/\W*$/, '');
+            var cpv = words[i].replace(/^\W*/, '').replace(/[^\w+]*$/, '');
 
             // category/package(-version)?
             if (cpv.match(/^\w[\w+.-]*\/\w[\w+-]*(-\d+(\.\d+)*[a-z]?((_alpha|_beta|_pre|_rc|_p)\d*)?(-r\d+)?)?$/))
