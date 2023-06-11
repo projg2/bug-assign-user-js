@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Gentoo Bugzilla bug assignment helper
 // @namespace    https://github.com/mgorny/bug-assign-user-js
-// @version      5
+// @version      6
 // @description  Helper to suggest proper assignees for a bug
 // @author       Michał Górny, Mart Raudsepp
 // @match        https://bugs.gentoo.org/*
@@ -181,7 +181,7 @@
         var topbox = document.getElementById('bug-assign-table');
         topbox.innerHTML = '';
 
-        var tr, td, input;
+        var a, tr, td, input;
 
         // header row
         tr = document.createElement('tr');
@@ -211,8 +211,12 @@
             topbox.appendChild(tr);
 
             td = document.createElement('th');
-            if (pkg != '_special')
-                td.textContent = pkg;
+            if (pkg != '_special') {
+                a = document.createElement('a');
+                a.href = 'https://packages.gentoo.org/packages/' + pkg;
+                a.textContent = pkg;
+                td.appendChild(a);
+            }
             td.style = 'text-align: left; border-top: 1px dashed black';
             tr.appendChild(td);
 
