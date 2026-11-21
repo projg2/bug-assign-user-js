@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Gentoo Bugzilla bug assignment helper
 // @namespace    https://github.com/mgorny/bug-assign-user-js
-// @version      8
+// @version      9
 // @description  Helper to suggest proper assignees for a bug
 // @author       Michał Górny, Mart Raudsepp
 // @match        https://bugs.gentoo.org/*
@@ -19,6 +19,9 @@
     var maintElems = {};
     // object where keys are packages and values are maintainer groups
     var maintGroups = {};
+    // object where keys are packages and values are upstream maintainers
+    // with cc-on-bugs="yes" (GLEP 67/68)
+    var upstreamMaintainers = {};
     // number of requests in progress
     var reqInProgress = 0;
 
@@ -259,9 +262,22 @@
                 ];
             }
 
-            for (var m in maintainers[pkg])
+            // GLEP 67: upstream maintainers with cc-on-bugs="yes" are
+            // CC-ed after all Gentoo maintainers, never assigned
+            var pkgMaints = maintainers[pkg].slice();
+            var upstreams = upstreamMaintainers[pkg] || [];
+            for (var u = 0; u < upstreams.length; ++u)
             {
-                var mdata = maintainers[pkg][m];
+                var dup = pkgMaints.some(function (x) {
+                    return x.email == upstreams[u].email;
+                });
+                if (!dup)
+                    pkgMaints.push(upstreams[u]);
+            }
+
+            for (var m = 0; m < pkgMaints.length; ++m)
+            {
+                var mdata = pkgMaints[m];
                 tr = document.createElement('tr');
                 topbox.appendChild(tr);
 
@@ -318,6 +334,11 @@
                 input.email = mdata.email;
                 input.groupA = groupA;
                 input.groupCC = groupCC;
+                if (mdata.upstream)
+                {
+                    input.disabled = true;
+                    input.title = 'Upstream maintainers are CC-ed only';
+                }
                 maintElems[mdata.email].a.push(input);
                 input.addEventListener('change', maintainerAssignExplicitChange);
                 td.appendChild(input);
@@ -356,6 +377,8 @@
     // short description of the maintainer's role, or null if none
     function maintainerRoleText(mdata)
     {
+        if (mdata.upstream)
+            return 'upstream';
         switch (mdata.proxied)
         {
             case 'yes':
@@ -509,6 +532,8 @@
             var m = maintElems[ev.target.maintainers[i]];
             var mty;
             if (groupChecked)
+                // entry 0 is a Gentoo maintainer or maintainer-needed@;
+                // upstream CCs come last
                 mty = i === 0 ? 'a' : 'cc';
             else
             {
@@ -647,12 +672,31 @@
                     var pkgmetadata = xmlhttp.responseXML.firstElementChild;
                     if (pkgmetadata.tagName == 'pkgmetadata') {
                         var results = [];
+                        var upstreamCCs = [];
                         for (var i = 0; i < pkgmetadata.children.length; ++i) {
                             var child = pkgmetadata.children[i];
                             if (child.tagName == 'maintainer')
                                 results.push(parseMaintainer(child));
+                            else if (child.tagName == 'upstream')
+                            {
+                                for (var j = 0; j < child.children.length; ++j)
+                                {
+                                    var um = child.children[j];
+                                    if (um.tagName != 'maintainer' ||
+                                            um.getAttribute('cc-on-bugs') != 'yes')
+                                        continue;
+                                    var umdata = parseMaintainer(um);
+                                    // GLEP 68 requires <email/>, but this
+                                    // is remote data: skip invalid entries
+                                    if (umdata.email === null)
+                                        continue;
+                                    umdata.upstream = true;
+                                    upstreamCCs.push(umdata);
+                                }
+                            }
                         }
                         maintainers[pkg] = results;
+                        upstreamMaintainers[pkg] = upstreamCCs;
                     }
                 }
                 else if (xmlhttp.status == 404)
@@ -683,6 +727,7 @@
         // mark as being refreshed
         topbox.innerHTML = '<div>Update in progress...</div>' + topbox.innerHTML;
         maintainers = {};
+        upstreamMaintainers = {};
 
         for (var i in packageList)
             fetchMaintainersForPackage(packageList[i]);
