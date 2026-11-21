@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Gentoo Bugzilla bug assignment helper
 // @namespace    https://github.com/mgorny/bug-assign-user-js
-// @version      6
+// @version      7
 // @description  Helper to suggest proper assignees for a bug
 // @author       Michał Górny, Mart Raudsepp
 // @match        https://bugs.gentoo.org/*
@@ -274,7 +274,7 @@
                 }
 
                 var full_name = '';
-                if (mdata.name !== null)
+                if (mdata.name != null)
                     full_name = mdata.name + ' ';
                 full_name += '<' + mdata.email + '>';
 
@@ -328,7 +328,7 @@
                 groupA.maintainers.push(mdata.email);
                 groupCC.maintainers.push(mdata.email);
 
-                if (mdata.description !== null)
+                if (mdata.description != null)
                 {
                     tr = document.createElement('tr');
                     topbox.appendChild(tr);
