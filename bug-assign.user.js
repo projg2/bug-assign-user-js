@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Gentoo Bugzilla bug assignment helper
 // @namespace    https://github.com/mgorny/bug-assign-user-js
-// @version      9
+// @version      10
 // @description  Helper to suggest proper assignees for a bug
 // @author       Michał Górny, Mart Raudsepp
 // @match        https://bugs.gentoo.org/*
@@ -22,6 +22,9 @@
     // object where keys are packages and values are upstream maintainers
     // with cc-on-bugs="yes" (GLEP 67/68)
     var upstreamMaintainers = {};
+    // object where keys are packages and values are lists of
+    // <straight-to-stable/> restrictions ('' for the whole package)
+    var straightToStablePkgs = {};
     // number of requests in progress
     var reqInProgress = 0;
 
@@ -219,6 +222,18 @@
                 a.href = 'https://packages.gentoo.org/packages/' + pkg;
                 a.textContent = pkg;
                 td.appendChild(a);
+
+                var sts = straightToStablePkgs[pkg];
+                if (sts.length > 0)
+                {
+                    var stsLabel = document.createElement('small');
+                    stsLabel.style = 'padding-left: .5em; font-weight: normal';
+                    stsLabel.textContent = '[straight-to-stable]';
+                    stsLabel.title = sts.map(function (r) {
+                        return r === '' ? 'all versions' : r;
+                    }).join(', ');
+                    td.appendChild(stsLabel);
+                }
             }
             td.style = 'text-align: left; border-top: 1px dashed black';
             tr.appendChild(td);
@@ -673,6 +688,7 @@
                     if (pkgmetadata.tagName == 'pkgmetadata') {
                         var results = [];
                         var upstreamCCs = [];
+                        var straightToStable = [];
                         for (var i = 0; i < pkgmetadata.children.length; ++i) {
                             var child = pkgmetadata.children[i];
                             if (child.tagName == 'maintainer')
@@ -694,9 +710,12 @@
                                     upstreamCCs.push(umdata);
                                 }
                             }
+                            else if (child.tagName == 'straight-to-stable')
+                                straightToStable.push(child.getAttribute('restrict') || '');
                         }
                         maintainers[pkg] = results;
                         upstreamMaintainers[pkg] = upstreamCCs;
+                        straightToStablePkgs[pkg] = straightToStable;
                     }
                 }
                 else if (xmlhttp.status == 404)
@@ -728,6 +747,7 @@
         topbox.innerHTML = '<div>Update in progress...</div>' + topbox.innerHTML;
         maintainers = {};
         upstreamMaintainers = {};
+        straightToStablePkgs = {};
 
         for (var i in packageList)
             fetchMaintainersForPackage(packageList[i]);
