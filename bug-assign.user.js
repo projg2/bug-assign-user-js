@@ -587,6 +587,27 @@
         }
     }
 
+    // return the text of the first child element named tag, or null
+    function childText(elem, tag)
+    {
+        for (var i = 0; i < elem.children.length; ++i)
+        {
+            if (elem.children[i].tagName == tag)
+                return elem.children[i].textContent.trim();
+        }
+        return null;
+    }
+
+    // convert a metadata.xml <maintainer/> element into a maintainer object
+    function parseMaintainer(elem)
+    {
+        return {
+            'email': childText(elem, 'email'),
+            'name': childText(elem, 'name'),
+            'description': childText(elem, 'description')
+        };
+    }
+
     // Issue an xmlHttpRequest for maintainers of package pkg
     // Triggers updateMaintainerTable() when all requests are finished
     function fetchMaintainersForPackage(pkg)
@@ -601,14 +622,9 @@
                     if (pkgmetadata.tagName == 'pkgmetadata') {
                         var results = [];
                         for (var i = 0; i < pkgmetadata.children.length; ++i) {
-                            if (pkgmetadata.children[i].tagName != 'maintainer')
-                                continue;
-
-                            var maintainer = {};
-                            for (var j = 0; j < pkgmetadata.children[i].children.length; ++j) {
-                                maintainer[pkgmetadata.children[i].children[j].tagName] = pkgmetadata.children[i].children[j].innerHTML;
-                            }
-                            results.push(maintainer);
+                            var child = pkgmetadata.children[i];
+                            if (child.tagName == 'maintainer')
+                                results.push(parseMaintainer(child));
                         }
                         maintainers[pkg] = results;
                     }
