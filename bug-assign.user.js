@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Gentoo Bugzilla bug assignment helper
 // @namespace    https://github.com/mgorny/bug-assign-user-js
-// @version      7
+// @version      8
 // @description  Helper to suggest proper assignees for a bug
 // @author       Michał Górny, Mart Raudsepp
 // @match        https://bugs.gentoo.org/*
@@ -284,6 +284,16 @@
                 maintText.textContent = mdata.email;
                 maintText.title = full_name;
                 td.appendChild(maintText);
+
+                var roleText = maintainerRoleText(mdata);
+                if (roleText !== null)
+                {
+                    var role = document.createElement('small');
+                    role.style = 'padding-left: .5em; font-style: italic';
+                    role.textContent = '(' + roleText + ')';
+                    td.appendChild(role);
+                }
+
                 var small = document.createElement('small');
                 small.style = 'padding-left: .5em';
                 var a = document.createElement('a');
@@ -341,6 +351,21 @@
         }
 
         syncMaintainerStatesToBug();
+    }
+
+    // short description of the maintainer's role, or null if none
+    function maintainerRoleText(mdata)
+    {
+        switch (mdata.proxied)
+        {
+            case 'yes':
+                return 'proxied';
+            case 'proxy':
+                return 'proxy';
+            case 'maintainer-and-proxy':
+                return 'maintainer and proxy';
+        }
+        return null;
     }
 
     // Set all maintainer checkboxes to a specific state
@@ -604,7 +629,8 @@
         return {
             'email': childText(elem, 'email'),
             'name': childText(elem, 'name'),
-            'description': childText(elem, 'description')
+            'description': childText(elem, 'description'),
+            'proxied': elem.getAttribute('proxied')
         };
     }
 
