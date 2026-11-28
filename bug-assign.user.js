@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Gentoo Bugzilla bug assignment helper
 // @namespace    https://github.com/mgorny/bug-assign-user-js
-// @version      10
+// @version      11
 // @description  Helper to suggest proper assignees for a bug
 // @author       Michał Górny, Mart Raudsepp
 // @match        https://bugs.gentoo.org/*
@@ -543,7 +543,7 @@
         for (var i = 0; i < ev.target.maintainers.length; ++i)
         {
             var m = maintElems[ev.target.maintainers[i]];
-            var mty;
+            var mty = null;
             if (groupChecked)
                 // entry 0 is a Gentoo maintainer or maintainer-needed@;
                 // upstream CCs come last
@@ -556,7 +556,7 @@
                     mty = 'cc';
             }
 
-            if (mty !== undefined)
+            if (mty !== null)
             {
                 m[mty][0].checked = groupChecked;
                 if (mty == 'a')
