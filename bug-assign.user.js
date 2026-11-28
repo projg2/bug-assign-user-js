@@ -456,7 +456,7 @@
         if (unCCBox !== null)
         {
             var unCCList = document.querySelectorAll('#cc option');
-            for (i = 0; i < unCCList.length; ++i)
+            for (var i = 0; i < unCCList.length; ++i)
             {
                 if (unCCList[i].value == email)
                 {
@@ -472,15 +472,13 @@
         var newCCInput = document.getElementById('newcc');
         if (newCCInput === null)
             newCCInput = document.getElementById('cc');
-        var newCC = newCCInput.value.split(',');
-        // first, clean up the list from any occurences of email and empty items
-        newCC = newCC.filter(function (val) { return val && val.trim() != email; });
+        // Bugzilla splits this field on commas and semicolons and trims each entry
+        var newCC = newCCInput.value.trim().split(/\s*[,;]\s*/);
+        // first, clean up the list from any occurrences of email and empty items
+        newCC = newCC.filter(function (val) { return val && val != email; });
         // then, add just one if requested and not in CC already
         if (state && !foundInCC)
             newCC.push(email);
-        // trim extra whitespace
-        for (var i = 0; i < newCC.length; ++i)
-            newCC[i] = newCC[i].trim();
         newCCInput.value = newCC.join(', ');
     }
 
@@ -624,7 +622,8 @@
         var newCCInput = document.getElementById('newcc');
         if (newCCInput === null)
             newCCInput = document.getElementById('cc');
-        var completeCCList = newCCInput.value.split(',');
+        // Bugzilla splits this field on commas and semicolons and trims each entry
+        var completeCCList = newCCInput.value.trim().split(/\s*[,;]\s*/);
         var unCCBox = document.getElementById('removecc');
         if (unCCBox !== null)
         {
